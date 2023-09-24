@@ -19,11 +19,11 @@ public class SearchShowController {
     }
 
     @GetMapping("{locationId}/{movieId}/shows")
-    public ResponseEntity<ShowDetailsResponse> getOrderByTrackingId(@PathVariable UUID movieId,
+    public ResponseEntity<ShowDetailsResponse> getShowsByMovieIdAndDate(@PathVariable UUID movieId,
                                                                     @PathVariable UUID locationId,
                                                                     @RequestParam Instant showDate) {
         ShowDetailsResponse showDetailsResponse = searchShowService
-                .getShowsbyMovieIdAndDate(GetShowsQuery.builder()
+                .getShowsByLocationIdMovieIdAndDate(GetShowsQuery.builder()
                         .movieId(movieId)
                         .showDate(showDate)
                         .locationId(locationId)

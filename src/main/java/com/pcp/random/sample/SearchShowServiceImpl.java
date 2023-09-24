@@ -20,7 +20,7 @@ public class SearchShowServiceImpl implements SearchShowService {
 
     @Override
     @Transactional(readOnly = true)
-    public ShowDetailsResponse getShowsbylocationIdMovieIdAndDate(GetShowsQuery getShowsQuery) {
+    public ShowDetailsResponse getShowsByLocationIdMovieIdAndDate(GetShowsQuery getShowsQuery) {
         Optional<List<Show>> showResult = showRepository.findByLocationIdMovieIdDate(getShowsQuery.getLocationId(),
                 getShowsQuery.getMovieId(), getShowsQuery.getShowDate());
         if (!showResult.isPresent()) {
