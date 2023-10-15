@@ -11,6 +11,7 @@ public class MainApp {
         list.addItem("Prabhu");
         list.addItem("Banani");
         list.insertFirstItem("Suman");
+        list.displayAll();
         list.deleteFirstItem();
         list.displayAll();
         list.insertFirstItem("Ravi");
