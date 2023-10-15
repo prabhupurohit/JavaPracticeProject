@@ -2,6 +2,7 @@ package com.pcp.stream;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 
 public class StreamApi {
 
@@ -31,25 +32,55 @@ public class StreamApi {
                 .map(Person::getName).collect(Collectors.toList());
         System.out.println(names);
 
-        //Get the persons having highest 2 salaries
+        //Method1: Get the persons having highest 2 salaries
 
         List<Person> list1 = personList.stream()
-                //.sorted((p1, p2) -> (int)(p2.getIncome() - p1.getIncome()))
-                // another way
-                //.sorted(Comparator.comparing(Person::getIncome, Comparator.reverseOrder()))
-                //.sorted(Comparator.comparing(Person::getIncome).reversed())
                 .sorted(Comparator.comparingDouble(Person::getIncome).reversed())
                 .limit(2)
                 .collect(Collectors.toList());
         System.out.println(list1);
 
-        //Get the Person with the Highest Salary
+        //Method2: Get the persons having highest 2 salaries
+
+        List<Person> list2 = personList.stream()
+                .sorted(Comparator.comparing(Person::getIncome, Comparator.reverseOrder()))
+                .limit(2)
+                .collect(Collectors.toList());
+        System.out.println(list2);
+
+        //Method3: Get the persons having highest 2 salaries
+
+        List<Person> list3 = personList.stream()
+                .sorted(Comparator.comparing(Person::getIncome).reversed())
+                .limit(2)
+                .collect(Collectors.toList());
+        System.out.println(list3);
+
+        //Method4: Get the persons having highest 2 salaries
+
+        List<Person> list4 = personList.stream()
+                .sorted((p1, p2) -> (int) (p2.getIncome() - p1.getIncome()))
+                .limit(2)
+                .collect(Collectors.toList());
+        System.out.println(list4);
+
+        //Method1: Get the Person with the Highest Salary
 
         Optional<Person> personMax = personList.stream().reduce((p1, p2) -> p1.getIncome() > p2.getIncome() ? p1 : p2);
-        // another way
-        //Person personHighestIncome = personMax.get();
-        //System.out.println(personHighestIncome);
         personMax.ifPresent(System.out::println);
+
+        //Method2: Get the Person with the Highest Salary
+        Person personMax1 = personList.stream().reduce((p1, p2) -> p1.getIncome() > p2.getIncome() ? p1 : p2)
+                .get();
+        System.out.println(personMax1);
+
+        //Method3: Get the Person with the Highest Salary
+        Person personMax2 = personList.stream()
+                .sorted(Comparator.comparingDouble(Person::getIncome).reversed())
+                                .limit(1)
+                                .collect(Collectors.toList()).get(0);
+
+        System.out.println(personMax2);
 
         //Find the Total Salary of Males and Females in a Map (Key: Male/Female, Value: Total Salary)
 
@@ -68,10 +99,16 @@ public class StreamApi {
 
         //Find the total salary of all the persons using Reduce
         Double personSum = personList.stream()
-                //.collect(Collectors.groupingBy(Person::getGender))
-                //        .entrySet().stream()
                 .mapToDouble(Person::getIncome)
                 .reduce(0, (v1, v2) -> v1 + v2);
+
+        OptionalDouble totalSum = personList.stream()
+                .collect(Collectors.groupingBy(Person::getGender))
+                .entrySet()
+                .stream().map(e -> e.getValue())
+                .mapToDouble(p -> p.stream().collect(Collectors.summingDouble(Person::getIncome)))
+                .reduce((v1, v2) -> v1 + v2);
+        System.out.println(totalSum.getAsDouble());
 
 
         System.out.println(personSum);
